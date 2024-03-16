@@ -43,10 +43,10 @@ void Drive::update(enum::drive_method drive_method){
 
     //Scale values to 12 volts - not strictly nessisary, but worth trying to see if it makes a difference
     //Seperated from other part to meet goal of modularity
-    float axis1 = axis1/8.33333333333333;
-    float axis2 = axis2/8.33333333333333;
-    float axis3 = axis3/8.33333333333333;
-    float axis4 = axis4/8.33333333333333;
+    axis1 = axis1/8.33333333333333;
+    axis2 = axis2/8.33333333333333;
+    axis3 = axis3/8.33333333333333;
+    axis4 = axis4/8.33333333333333;
 
     //Check which drive method is requested, and apply that method
     //I'm using a switch statement because they are faster than if statements
@@ -115,7 +115,7 @@ void Drive::update(enum::drive_method drive_method){
     
 }
 
-float Drive::drive_for_degrees(float degrees){
+void Drive::drive_for_degrees(float degrees){
     
     //Spin each motor to target
     L.spinFor(degrees, vex::degrees);

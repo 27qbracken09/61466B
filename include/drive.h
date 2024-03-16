@@ -44,7 +44,7 @@ class Drive
         //Finally implement odometry and coordinate system.
 
         //Commands to Drive straight, w/o non-vex Algorithms
-        float drive_for_degrees(float degree);
+        void drive_for_degrees(float degree);
 
 
 };
