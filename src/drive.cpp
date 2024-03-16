@@ -20,3 +20,13 @@ Drive::Drive(vex::motor motorLF, vex::motor motorRF ) : L(motorLF), R(motorRF){
    
 
 }
+
+//Low level access to hardware
+void Drive::drive_with_voltage(float L_volt, float R_volt){
+    L.spin(vex::forward,L_volt,vex::volt);
+    R.spin(vex::forward,R_volt,vex::volt);
+}
+
+
+/* Started Drive Class by figuring out the most simple way to control the robot, and plan to build from there.
+   The three levels of drive complexity is voltage controlled, driver controlled, and program controlled */

@@ -27,5 +27,10 @@ class Drive
         vex::motor_group L;
         vex::motor_group R;
 
+        //Functions that can be used to control newly constructed Drivetrain
+        
+        //Drive with voltage is low level access to hardware
+        void drive_with_voltage(float L_volt, float R_volt);
+
 
 };
