@@ -27,7 +27,12 @@ competition Competition;
 /*---------------------------------------------------------------------------*/
 
 void pre_auton(void) {
-  
+  // First, I need to declare a drivetrain
+  // I want to code a custom drivetrain so that I can have more control
+  // Declaration should look like this:
+  // Drivetrain chassis(L motor group, R motor group, Gyro/Inertial, Track wheel 1, Track wheel 2);
+  // I'm going to start with a drivetrain that responds to joystick inputs.
+  //Created Drive.h and cpp
   
 }
 

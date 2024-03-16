@@ -9,6 +9,11 @@
 //Custom Includes
 #include <iostream>
 
+//Custom Headers
+
+//Allows this to be accessed by the rest of the program files
+#include "drive.h"
+
 #define PROG_NAME "Rewrite"
 
 #define waitUntil(condition)                                                   \
