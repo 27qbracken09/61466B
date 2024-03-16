@@ -4,6 +4,9 @@
 //Inclusion of vex.h
 #include "vex.h"
 
+//Declaration of different ways to drive - Refer to vex for control styles
+enum drive_method{NO_DRIVE, TANK, SPLIT_ARCADE, COMB_ARCADE_L, COMB_ARCADE_R};
+
 //Declaration of Drive class
 //This allows me to create a "template" that can be easily modified by feeding it certain variables
 //Sort of like a function on steroids
@@ -31,6 +34,9 @@ class Drive
         
         //Drive with voltage is low level access to hardware
         void drive_with_voltage(float L_volt, float R_volt);
+
+        //Next is driver control
+        void update(enum::drive_method drive_method);
 
 
 };

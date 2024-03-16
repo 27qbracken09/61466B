@@ -10,7 +10,7 @@
 //Goal: Design a functional and modular system to control the robot
 //Constraints: Different motor ports must not cause a difference in performance, must be able to be applied to 2, 4, and 6 motor drive
 
-//Goal for today: Start creating drive control - make it modular
+//Goal for 3/16/24: Start creating drive control - make it modular
 
 
 
@@ -33,13 +33,27 @@ competition Competition;
 /*  not every time that the robot is disabled.                               */
 /*---------------------------------------------------------------------------*/
 
-void pre_auton(void) {
-  // First, I need to declare a drivetrain
+// First, I need to declare a drivetrain
   // I want to code a custom drivetrain so that I can have more control
   // Declaration should look like this:
   // Drivetrain chassis(L motor group, R motor group, Gyro/Inertial, Track wheel 1, Track wheel 2);
   // I'm going to start with a drivetrain that responds to joystick inputs.
   //Created Drive.h and cpp
+
+//Test Drivetrain Declaration, remove when actually using program
+
+//Fake drive motors
+vex::motor motor1(PORT1);
+vex::motor motor2(PORT2);
+vex::motor motor3(PORT3);
+vex::motor motor4(PORT4);
+
+//Actual Declaration
+Drive chassis(motor1, motor2, motor3, motor4);
+
+
+void pre_auton(void) {
+  
   
 }
 
@@ -73,14 +87,9 @@ void usercontrol(void) {
   // User control code here, inside the loop
   while (1) {
     
-    // This is the main execution loop for the user control program.
-    // Each time through the loop your program should update motor + servo
-    // values based on feedback from the joysticks.
+    //Update Driver control Drivetrain velocities using update function - Drivetrain is called chassis in this
+    chassis.update(TANK);
 
-    // ........................................................................
-    // Insert user code here. This is where you use the joystick values to
-    // update your motors, etc.
-    // ........................................................................
 
     wait(20, msec); // Sleep the task for a short amount of time to
                     // prevent wasted resources.
