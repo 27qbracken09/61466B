@@ -4,19 +4,52 @@
 //Along with the overloaded constructors in drive.h, we need all three here as well
 
 //6M Drive
-Drive::Drive(vex::motor motorLF, vex::motor motorLM, vex::motor motorLR, vex::motor motorRF, vex::motor motorRM, vex::motor motorRB) : L(motorLF,motorLM,motorLR), R(motorRF, motorRM, motorRB){
+Drive::Drive(int L_Port1, int L_Port2, int L_Port3, int R_Port1, int R_Port2, int R_Port3) : 
+L1(L_Port1),
+L2(L_Port2),
+L3(L_Port3),
+
+R1(R_Port1, true),
+R2(R_Port2, true),
+R3(R_Port3, true),
+
+L(L1, L2, L3),
+R(R1, R2, R3)
+{
    
 
 }
 
 //4M Drive
-Drive::Drive(vex::motor motorLF, vex::motor motorLR, vex::motor motorRF, vex::motor motorRB) : L(motorLF,motorLR), R(motorRF,motorRB){
+Drive::Drive(int L_Port1, int L_Port2, int R_Port1, int R_Port2):
+L1(L_Port1),
+L2(L_Port2),
+L3(NULL),
+
+R1(R_Port1, true),
+R2(R_Port2, true),
+R3(NULL, true),
+
+L(L1, L2, L3),
+R(R1, R2, R3)
+{
    
 
 }
 
 //2M Drive for crazy people
-Drive::Drive(vex::motor motorLF, vex::motor motorRF ) : L(motorLF), R(motorRF){
+Drive::Drive(int L_Port1, int R_Port1):
+L1(L_Port1),
+L2(NULL),
+L3(NULL),
+
+R1(R_Port1, true),
+R2(NULL, true),
+R3(NULL, true),
+
+L(L1, L2, L3),
+R(R1, R2, R3)
+{
    
 
 }
@@ -48,20 +81,24 @@ void Drive::update(enum::drive_method drive_method){
     axis3 = axis3/8.33333333333333;
     axis4 = axis4/8.33333333333333;
 
+    
     //Check which drive method is requested, and apply that method
     //I'm using a switch statement because they are faster than if statements
     switch (drive_method){
 
         //In the case of no driver control do nothing - mostly just a placeholder
         case NO_DRIVE:
+            break;
 
         //In the case of tank, set motors to correct values to accomplish layout, refer to vex tank control
         case TANK:
+            
             //Axis 3 is left stick up and down
             L.spin(vex::forward, axis3, vex::volt);
 
             //Axis 2 is right stick up and down
             R.spin(vex::forward, axis2, vex::volt);
+            break;
 
         //In the case of split arcade, use the controller values to modify final motor speed
         case SPLIT_ARCADE:
@@ -76,6 +113,7 @@ void Drive::update(enum::drive_method drive_method){
             //Apply voltages to the motors
             L.spin(vex::forward, L_volt, vex::volt);
             R.spin(vex::forward, R_volt, vex::volt);
+            break;
 
         //In the case of combined arcade left (all on the left joystick), follow the same process as split arcade, but with left stick not 2 seperate ones
         case COMB_ARCADE_L:
@@ -90,6 +128,7 @@ void Drive::update(enum::drive_method drive_method){
             //Apply voltages to the motors
             L.spin(vex::forward, L_volt, vex::volt);
             R.spin(vex::forward, R_volt, vex::volt);
+            break;
 
         //In the case of Right combined arcade, do the same thing as left comb, but with different axis values
         case COMB_ARCADE_R:
@@ -104,6 +143,7 @@ void Drive::update(enum::drive_method drive_method){
             //Apply voltages to the motors
             L.spin(vex::forward, L_volt, vex::volt);
             R.spin(vex::forward, R_volt, vex::volt);
+            break;
 
 
 

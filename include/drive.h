@@ -18,13 +18,22 @@ class Drive
         //Multiple class constructors so that I can "overload" them and have multiple argument amounts
 
         //6M Drive
-        Drive(vex::motor motorLF, vex::motor motorLM, vex::motor motorLR, vex::motor motorRF, vex::motor motorRM, vex::motor motorRB);
+        Drive(int L_Port1, int L_Port2, int L_Port3, int R_Port1, int R_Port2, int R_Port3);
         
         //4M Drive
-        Drive(vex::motor motorLF, vex::motor motorLR, vex::motor motorRF, vex::motor motorRB);
+        Drive(int L_Port1, int L_Port2, int R_Port1, int R_Port2);
 
         //2M Drive for whatever crazy reason
-        Drive(vex::motor motorLF,vex::motor motorRF);
+        Drive(int L_Port1, int R_Port1);
+
+        //Motors - Unused ones use the port NULL
+        vex::motor L1;
+        vex::motor L2;
+        vex::motor L3;
+        vex::motor R1;
+        vex::motor R2;
+        vex::motor R3;
+
 
         //Motor groups that the motors "feed" into so they can all be controlled together
         vex::motor_group L;
