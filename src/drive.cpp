@@ -36,10 +36,10 @@ void Drive::update(enum::drive_method drive_method){
     float R_volt = 0;
 
     //Read Joystick values and store them - I create a seperate "controller" every time so this doesn't interfere with potential mechanism control
-    int axis1 = vex::controller(vex::primary).Axis1.position();
-    int axis2 = vex::controller(vex::primary).Axis2.position();
-    int axis3 = vex::controller(vex::primary).Axis3.position();
-    int axis4 = vex::controller(vex::primary).Axis4.position();
+    float axis1 = vex::controller(vex::primary).Axis1.position();
+    float axis2 = vex::controller(vex::primary).Axis2.position();
+    float axis3 = vex::controller(vex::primary).Axis3.position();
+    float axis4 = vex::controller(vex::primary).Axis4.position();
 
     //Scale values to 12 volts - not strictly nessisary, but worth trying to see if it makes a difference
     //Seperated from other part to meet goal of modularity
