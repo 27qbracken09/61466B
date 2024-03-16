@@ -1,0 +1,19 @@
+{
+	"extension": {
+		"version": "0.5.0",
+		"json": 2
+	},
+	"project": {
+		"name": "Template_Program_Rewrite",
+		"description": "",
+		"creationDate": "3/16/2024, 11:54:25 AM",
+		"platform": "V5",
+		"language": "cpp",
+		"slot": 1,
+		"sdkVersion": "V5_20240223_11_00_00",
+		"cpp": {
+			"includePath": [],
+			"printf_float": true
+		}
+	}
+}
