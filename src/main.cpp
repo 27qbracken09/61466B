@@ -7,6 +7,13 @@
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
+//Goal: Design a functional and modular system to control the robot
+//Constraints: Different motor ports must not cause a difference in performance, must be able to be applied to 2, 4, and 6 motor drive
+
+//Goal for today: Start creating drive control - make it modular
+
+
+
 #include "vex.h"
 
 using namespace vex;
