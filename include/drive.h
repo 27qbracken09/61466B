@@ -1,4 +1,4 @@
-//I'm going to have the header files all feed into vex.h, so we need this compiler command
+//I'm going to have the header files all feed into vex.h, so we need this compiler command to not go into an infinite loop
 #pragma once
 
 //Inclusion of vex.h

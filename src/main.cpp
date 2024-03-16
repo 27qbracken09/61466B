@@ -7,7 +7,7 @@
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
-//Goal: Design a functional and modular system to control the robot
+//Goal: Design a functional and modular system to control the robot, should also be accurate
 //Constraints: Different motor ports must not cause a difference in performance, must be able to be applied to 2, 4, and 6 motor drive
 
 //Goal for 3/16/24: Start creating drive control - make it modular
