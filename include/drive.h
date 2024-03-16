@@ -38,5 +38,13 @@ class Drive
         //Next is driver control
         void update(enum::drive_method drive_method);
 
+        //Finally, functions to Control the Robot Autonomously - Initial plans for development of this section start with a Drive straight command that stops at a specified motor rotation, no fancy algorithms.
+        //Then add commands to turn to absolute degree value, again, no algorithms
+        //Next create advanced commands that handle PID and accurate driving and turning.
+        //Finally implement odometry and coordinate system.
+
+        //Commands to Drive straight, w/o non-vex Algorithms
+        float drive_for_degrees(float degree);
+
 
 };

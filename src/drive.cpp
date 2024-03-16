@@ -115,6 +115,16 @@ void Drive::update(enum::drive_method drive_method){
     
 }
 
+float Drive::drive_for_degrees(float degrees){
+    
+    //Spin each motor to target
+    L.spinFor(degrees, vex::degrees);
+    R.spinFor(degrees, vex::degrees);
+    
+    
+    
+
+}
 
 /* Started Drive Class by figuring out the most simple way to control the robot, and plan to build from there.
    The three levels of drive complexity is voltage controlled, driver controlled, and program controlled */
