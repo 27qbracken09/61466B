@@ -42,14 +42,11 @@ competition Competition;
 
 //Test Drivetrain Declaration, remove when actually using program
 
-//Fake drive motors
-vex::motor motor1(PORT1);
-vex::motor motor2(PORT2);
-vex::motor motor3(PORT3);
-vex::motor motor4(PORT4);
 
 //Actual Declaration
-Drive chassis(motor1, motor2, motor3, motor4);
+Drive chassis(PORT14, PORT16, PORT12, PORT13);
+
+
 
 
 void pre_auton(void) {
@@ -88,6 +85,7 @@ void usercontrol(void) {
   while (1) {
     
     //Update Driver control Drivetrain velocities using update function - Drivetrain is called chassis in this
+    
     chassis.update(TANK);
 
 
@@ -100,7 +98,7 @@ void usercontrol(void) {
 // Main will set up the competition functions and callbacks.
 //
 int main() {
-  std::cout << "\nStarted Program: " << PROG_NAME;
+  std::cout << "\nStarted Program";
   // Set up callbacks for autonomous and driver control periods.
   Competition.autonomous(autonomous);
   Competition.drivercontrol(usercontrol);
