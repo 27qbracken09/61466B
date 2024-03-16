@@ -6,6 +6,10 @@
 #include "v5.h"
 #include "v5_vcs.h"
 
+//Custom Includes
+#include <iostream>
+
+#define PROG_NAME "Rewrite"
 
 #define waitUntil(condition)                                                   \
   do {                                                                         \
