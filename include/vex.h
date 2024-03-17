@@ -13,6 +13,8 @@
 
 //Allows this to be accessed by the rest of the program files
 #include "drive.h"
+#include "pid.h"
+#include "util.h"
 
 #define PROG_NAME "Rewrite"
 
@@ -23,3 +25,5 @@
 
 #define repeat(iterations)                                                     \
   for (int iterator = 0; iterator < iterations; iterator++)
+
+extern vex::brain Brain;

@@ -18,13 +18,13 @@ class Drive
         //Multiple class constructors so that I can "overload" them and have multiple argument amounts
 
         //6M Drive
-        Drive(int L_Port1, int L_Port2, int L_Port3, int R_Port1, int R_Port2, int R_Port3);
+        Drive(int L_Port1, int L_Port2, int L_Port3, int R_Port1, int R_Port2, int R_Port3, float wheel_size);
         
         //4M Drive
-        Drive(int L_Port1, int L_Port2, int R_Port1, int R_Port2);
+        Drive(int L_Port1, int L_Port2, int R_Port1, int R_Port2, float wheel_size);
 
         //2M Drive for whatever crazy reason
-        Drive(int L_Port1, int R_Port1);
+        Drive(int L_Port1, int R_Port1, float wheel_size);
 
         //Motors - Unused ones use the port NULL
         vex::motor L1;
@@ -55,5 +55,11 @@ class Drive
         //Commands to Drive straight, w/o non-vex Algorithms
         void drive_for_degrees(float degree);
 
+        //Advanced Algorithms - PID
+        float drive_for(float inches);
+
+    //Private Variables cannot be seen by other parts of the program
+    private:
+        float wheel_ratio;
 
 };

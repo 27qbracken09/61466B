@@ -18,6 +18,8 @@
 
 using namespace vex;
 
+
+
 // A global instance of competition
 competition Competition;
 
@@ -44,7 +46,7 @@ competition Competition;
 
 
 //Actual Declaration
-Drive chassis(PORT14, PORT16, PORT12, PORT13);
+Drive chassis(PORT14, PORT16, PORT12, PORT13, 4);
 
 
 
@@ -83,10 +85,11 @@ void autonomous(void) {
 void usercontrol(void) {
   // User control code here, inside the loop
   while (1) {
+    std::cout << "\nDriverControl Started";
     
     //Update Driver control Drivetrain velocities using update function - Drivetrain is called chassis in this
-    
-    chassis.update(TANK);
+    chassis.drive_for(12);
+    //chassis.update(TANK);
 
 
     wait(20, msec); // Sleep the task for a short amount of time to

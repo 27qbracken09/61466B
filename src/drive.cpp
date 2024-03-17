@@ -2,9 +2,10 @@
 #include "vex.h"
 
 //Along with the overloaded constructors in drive.h, we need all three here as well
+//Unused motors have their ports set as NULL - This satisfies the requirement that all motors must be declared, while not actually giving them a port
 
 //6M Drive
-Drive::Drive(int L_Port1, int L_Port2, int L_Port3, int R_Port1, int R_Port2, int R_Port3) : 
+Drive::Drive(int L_Port1, int L_Port2, int L_Port3, int R_Port1, int R_Port2, int R_Port3, float wheel_size) : 
 L1(L_Port1),
 L2(L_Port2),
 L3(L_Port3),
@@ -14,14 +15,16 @@ R2(R_Port2, true),
 R3(R_Port3, true),
 
 L(L1, L2, L3),
-R(R1, R2, R3)
+R(R1, R2, R3),
+//First, we need to convert diameter to Circumference, then we can use that to find the ratio of degrees to inches
+wheel_ratio((wheel_size*M_PI)/360)
 {
    
 
 }
 
 //4M Drive
-Drive::Drive(int L_Port1, int L_Port2, int R_Port1, int R_Port2):
+Drive::Drive(int L_Port1, int L_Port2, int R_Port1, int R_Port2, float wheel_size):
 L1(L_Port1),
 L2(L_Port2),
 L3(NULL),
@@ -31,14 +34,16 @@ R2(R_Port2, true),
 R3(NULL, true),
 
 L(L1, L2, L3),
-R(R1, R2, R3)
+R(R1, R2, R3),
+//First, we need to convert diameter to Circumference, then we can use that to find the ratio of degrees to inches
+wheel_ratio((wheel_size*M_PI)/360)
 {
    
 
 }
 
 //2M Drive for crazy people
-Drive::Drive(int L_Port1, int R_Port1):
+Drive::Drive(int L_Port1, int R_Port1, float wheel_size):
 L1(L_Port1),
 L2(NULL),
 L3(NULL),
@@ -48,7 +53,9 @@ R2(NULL, true),
 R3(NULL, true),
 
 L(L1, L2, L3),
-R(R1, R2, R3)
+R(R1, R2, R3),
+//First, we need to convert diameter to Circumference, then we can use that to find the ratio of degrees to inches
+wheel_ratio((wheel_size*M_PI)/360)
 {
    
 
@@ -164,6 +171,52 @@ void Drive::drive_for_degrees(float degrees){
     
     
 
+}
+
+Drive_PID Drive_PID_L(0.07,0,0, 1);
+Drive_PID Drive_PID_R(0.07,0.0001,0, 1);
+
+//Drive_for command will use a Drive_PID in combination with the wheel size to drive a real-world distance
+float Drive::drive_for(float inches){
+
+    std::cout << "\nDrivefor Started";
+    //Start by converting inches into degrees, to do this, we need the wheel size, which we can put in the constructor.
+    float desired_degrees = inches/wheel_ratio;
+
+    //Output for debugging
+    std::cout << "\nDesired Degrees: " << desired_degrees;
+
+    //Then set desired degrees to distance from target - I'm going to try one for each wheel to help with accuracy
+    float target_L_degrees = desired_degrees+L.position(vex::degrees);
+    float target_R_degrees = desired_degrees+R.position(vex::degrees);
+
+    //While loop for testing
+    while(!(Drive_PID_L.close_enough(5) || Drive_PID_R.close_enough(5))){
+
+    //We then have to compute error to feed into our Drive_PID function
+    float error_L_degrees = target_L_degrees-L.position(vex::degrees);
+    float error_R_degrees = target_R_degrees-R.position(vex::degrees);
+
+    //We'll use two Drive_PID's because we have two wheels, and therefore two calculations - They were declared above this function
+    float L_volts = Drive_PID_L.calculate(error_L_degrees);
+    float R_volts = Drive_PID_R.calculate(error_R_degrees);
+
+    //Output To terminal for debugging
+    //std::cout << "\n" << L_volts << ", " << R_volts << ", " << L.position(vex::degrees) << ", " << R.position(vex::degrees);
+
+    //Then Apply to motors
+    L.spin(vex::forward, L_volts, vex::volt);
+    R.spin(vex::forward, R_volts, vex::volt);
+    wait(20,vex::msec);
+    }
+
+    std::cout << "\ndrive_for done";
+    L.stop(vex::hold);
+    R.stop(vex::hold);
+    return 1;
+
+    
+    
 }
 
 /* Started Drive Class by figuring out the most simple way to control the robot, and plan to build from there.
