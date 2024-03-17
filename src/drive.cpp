@@ -5,7 +5,7 @@
 //Unused motors have their ports set as NULL - This satisfies the requirement that all motors must be declared, while not actually giving them a port
 
 //6M Drive
-Drive::Drive(int L_Port1, int L_Port2, int L_Port3, int R_Port1, int R_Port2, int R_Port3, float wheel_size) : 
+Drive::Drive(int L_Port1, int L_Port2, int L_Port3, int R_Port1, int R_Port2, int R_Port3, float wheel_size, int I_Port) : 
 L1(L_Port1),
 L2(L_Port2),
 L3(L_Port3),
@@ -17,14 +17,17 @@ R3(R_Port3, true),
 L(L1, L2, L3),
 R(R1, R2, R3),
 //First, we need to convert diameter to Circumference, then we can use that to find the ratio of degrees to inches
-wheel_ratio((wheel_size*M_PI)/360)
+wheel_ratio((wheel_size*M_PI)/360),
+I(I_Port)
 {
-   
+//Calibrate Inertial/Gyro
+I.calibrate();
+while(I.isCalibrating()) wait(20,vex::msec);
 
 }
 
 //4M Drive
-Drive::Drive(int L_Port1, int L_Port2, int R_Port1, int R_Port2, float wheel_size):
+Drive::Drive(int L_Port1, int L_Port2, int R_Port1, int R_Port2, float wheel_size, int I_Port):
 L1(L_Port1),
 L2(L_Port2),
 L3(NULL),
@@ -36,14 +39,15 @@ R3(NULL, true),
 L(L1, L2, L3),
 R(R1, R2, R3),
 //First, we need to convert diameter to Circumference, then we can use that to find the ratio of degrees to inches
-wheel_ratio((wheel_size*M_PI)/360)
+wheel_ratio((wheel_size*M_PI)/360),
+I(I_Port)
 {
    
 
 }
 
 //2M Drive for crazy people
-Drive::Drive(int L_Port1, int R_Port1, float wheel_size):
+Drive::Drive(int L_Port1, int R_Port1, float wheel_size, int I_Port):
 L1(L_Port1),
 L2(NULL),
 L3(NULL),
@@ -55,7 +59,8 @@ R3(NULL, true),
 L(L1, L2, L3),
 R(R1, R2, R3),
 //First, we need to convert diameter to Circumference, then we can use that to find the ratio of degrees to inches
-wheel_ratio((wheel_size*M_PI)/360)
+wheel_ratio((wheel_size*M_PI)/360),
+I(I_Port)
 {
    
 
@@ -211,12 +216,73 @@ float Drive::drive_for(float inches){
     }
 
     std::cout << "\ndrive_for done";
+
+    //Added hold so motors do not coast - And had them stop in the first place to negate the affects of residual voltage
     L.stop(vex::hold);
     R.stop(vex::hold);
-    return 1;
+
+    //Return avg for testing and datalogging
+    return (L.position(vex::degrees)+R.position(vex::degrees))/2;
 
     
     
+}
+
+Drive_PID Turn_PID(0.1,0,0,1.5);
+float Drive::turn_to(float degrees){
+    //Notify that turn has started
+    std::cout << "\nTurnto Started";
+
+   
+
+    //Collect initial gyro/inertial heading - In degrees from 0 - 360
+    float normalized_target_I_degrees = reduce_negative_180_to_180(degrees);
+
+    
+
+    //Use PID declared above to turn to correct heading
+    while (!Turn_PID.close_enough(5)){
+
+            
+            //Updated to handle "directional" 360 degrees to easily calculate 
+            //Helpful document: https://forum.arduino.cc/t/calculating-heading-distance-and-direction/92144/5
+            float normalized_current_I_degrees = reduce_negative_180_to_180(I.heading());
+
+            float normalized_error_I_degrees = reduce_negative_180_to_180(normalized_target_I_degrees-normalized_current_I_degrees);
+
+            float I_voltage = Turn_PID.calculate(normalized_error_I_degrees);
+
+
+        
+
+        
+        
+        //Not needed, left here so I can refer back to it
+        //Calculate Voltage needed - Left wheel will be swapped to negative because that will make the robot turn in the direction of the gyro
+        //float I_voltage = Turn_PID.calculate(error_I_degrees);
+
+        //Debugging
+        //std::cout << "\n" << I_voltage;
+
+        //Spin wheels
+        L.spin(vex::forward,I_voltage,vex::volt);
+        R.spin(vex::forward,-I_voltage,vex::volt);
+
+        //delay to even stuff out
+        wait(20,vex::msec);
+
+
+    }
+
+    //When PID thinks it's close enough, stop motors
+    L.stop(vex::hold);
+    R.stop(vex::hold);
+
+    //Notify user
+    std::cout << "\nTurnTo Done";
+
+    return I.heading();
+
 }
 
 /* Started Drive Class by figuring out the most simple way to control the robot, and plan to build from there.

@@ -18,13 +18,13 @@ class Drive
         //Multiple class constructors so that I can "overload" them and have multiple argument amounts
 
         //6M Drive
-        Drive(int L_Port1, int L_Port2, int L_Port3, int R_Port1, int R_Port2, int R_Port3, float wheel_size);
+        Drive(int L_Port1, int L_Port2, int L_Port3, int R_Port1, int R_Port2, int R_Port3, float wheel_size, int I_Port);
         
         //4M Drive
-        Drive(int L_Port1, int L_Port2, int R_Port1, int R_Port2, float wheel_size);
+        Drive(int L_Port1, int L_Port2, int R_Port1, int R_Port2, float wheel_size, int I_Port);
 
         //2M Drive for whatever crazy reason
-        Drive(int L_Port1, int R_Port1, float wheel_size);
+        Drive(int L_Port1, int R_Port1, float wheel_size, int I_Port);
 
         //Motors - Unused ones use the port NULL
         vex::motor L1;
@@ -38,6 +38,9 @@ class Drive
         //Motor groups that the motors "feed" into so they can all be controlled together
         vex::motor_group L;
         vex::motor_group R;
+
+        //Inertial to manage angle
+        vex::inertial I;
 
         //Functions that can be used to control newly constructed Drivetrain
         
@@ -57,6 +60,7 @@ class Drive
 
         //Advanced Algorithms - PID
         float drive_for(float inches);
+        float turn_to(float degrees);
 
     //Private Variables cannot be seen by other parts of the program
     private:

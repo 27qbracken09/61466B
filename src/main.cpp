@@ -45,8 +45,8 @@ competition Competition;
 //Test Drivetrain Declaration, remove when actually using program
 
 
-//Actual Declaration
-Drive chassis(PORT14, PORT16, PORT12, PORT13, 4);
+//Actual Declaration - L1, L2, R1, R2, Wheel Diameter, Inertial Port
+Drive chassis(PORT14, PORT16, PORT12, PORT13, 4, PORT3);
 
 
 
@@ -88,7 +88,10 @@ void usercontrol(void) {
     std::cout << "\nDriverControl Started";
     
     //Update Driver control Drivetrain velocities using update function - Drivetrain is called chassis in this
-    chassis.drive_for(12);
+    //chassis.drive_for(12);
+    while (chassis.I.isCalibrating()) wait(20,msec);
+    chassis.turn_to(90);
+    
     //chassis.update(TANK);
 
 
