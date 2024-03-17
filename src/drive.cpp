@@ -178,6 +178,12 @@ void Drive::drive_for_degrees(float degrees){
 
 }
 
+//When tuning drive PID I started by finding a number that would have a slope of 1, with the way the math works out, 0.35 was close
+//I then noticed that the PID couldn't achive its goal because the voltage was getting too low, I doubled the kP constant and tried a gain
+//It worked better but still didn't achieve the target
+//Finally I decided to add kC to overcome static friction because increasing kP anymore made the robot Jerky
+//Note: This was for a test robot, and these parameters will change with a new robot next year
+
 Drive_PID Drive_PID_L(0.07,0,0, 1);
 Drive_PID Drive_PID_R(0.07,0.0001,0, 1);
 
