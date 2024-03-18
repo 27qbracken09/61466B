@@ -25,13 +25,13 @@ odom_drive(drivetrain)
 
 float Drive::odom::poll_chord(){
     //First thing to do is to retrieve the encoder positions
-    float parallel_rotation = /*parallel.position(vex::degrees)*/360;
-    float perpendicular_rotation = /*perpendicular.position(vex::degrees)*/0;
+    float parallel_rotation = parallel.position(vex::degrees);
+    float perpendicular_rotation = perpendicular.position(vex::degrees);
     
     
     //Convert to radians because that's what trig functions take
-    I_heading = to_rad(/*odom_drive.I.heading()*/0.1);
-    std::cout << "\n" << I_heading;
+    I_heading = to_rad(odom_drive.I.heading());
+    
     
     
 
@@ -68,5 +68,24 @@ float Drive::odom::poll_x_odom(){
 
     Global_x_position += start_x_offset;
     Global_y_position += start_y_offset;
+
+    return Global_x_position;
+}
+
+float Drive::odom::poll_y_odom(){
+
+    //Update vars - Calculate chord
+    poll_chord();
+
+    //Convert Local Coordinate system to Global
+    Global_x_position = cos(I_heading)*y_chord;
+    Global_y_position = (sin(I_heading)*y_chord)+x_chord;
+
+    //Apply starting offsets
+
+    Global_x_position += start_x_offset;
+    Global_y_position += start_y_offset;
+
+    return Global_y_position;
 }
 
