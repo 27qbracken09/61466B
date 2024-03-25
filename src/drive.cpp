@@ -18,7 +18,9 @@ L(L1, L2, L3),
 R(R1, R2, R3),
 //First, we need to convert diameter to Circumference, then we can use that to find the ratio of degrees to inches
 wheel_ratio((wheel_size*M_PI)/360),
-I(I_Port)
+I(I_Port),
+parallel(NULL),
+perpendicular(NULL)
 {
 //Calibrate Inertial/Gyro
 I.calibrate();
@@ -40,7 +42,9 @@ L(L1, L2, L3),
 R(R1, R2, R3),
 //First, we need to convert diameter to Circumference, then we can use that to find the ratio of degrees to inches
 wheel_ratio((wheel_size*M_PI)/360),
-I(I_Port)
+I(I_Port),
+parallel(NULL),
+perpendicular(NULL)
 {
    
 
@@ -60,11 +64,119 @@ L(L1, L2, L3),
 R(R1, R2, R3),
 //First, we need to convert diameter to Circumference, then we can use that to find the ratio of degrees to inches
 wheel_ratio((wheel_size*M_PI)/360),
-I(I_Port)
+I(I_Port),
+parallel(NULL),
+perpendicular(NULL)
 {
    
 
 }
+
+//Odom Constructors
+//6M Drive
+Drive::Drive(
+    int L_Port1, 
+    int L_Port2, 
+    int L_Port3, 
+    int R_Port1, 
+    int R_Port2, 
+    int R_Port3, 
+    float wheel_size, 
+    int I_Port, 
+    int Parallel_to_wheels_tracker_port, 
+    int Perpendicular_to_wheels_tracker_port, 
+    float Parallel_distance_from_center, 
+    float Perpendicular_distance_from_center,
+    float Tracking_wheel_diameter,
+    float X_offset,
+    float Y_offset
+    ) : 
+    L1(L_Port1),
+    L2(L_Port2),
+    L3(L_Port3),
+
+    R1(R_Port1, true),
+    R2(R_Port2, true),
+    R3(R_Port3, true),
+
+    L(L1, L2, L3),
+    R(R1, R2, R3),
+    //First, we need to convert diameter to Circumference, then we can use that to find the ratio of degrees to inches
+    wheel_ratio((wheel_size*M_PI)/360),
+    I(I_Port),
+    parallel(NULL),
+    perpendicular(NULL)
+    {
+//Calibrate Inertial/Gyro
+        I.calibrate();
+        while(I.isCalibrating()) wait(20,vex::msec);
+
+    }
+
+//4M Drive
+Drive::Drive(
+    int L_Port1, 
+    int L_Port2, 
+    int R_Port1, 
+    int R_Port2, 
+    float wheel_size, 
+    int I_Port,
+    int Parallel_to_wheels_tracker_port, 
+    int Perpendicular_to_wheels_tracker_port, 
+    float Parallel_distance_from_center, 
+    float Perpendicular_distance_from_center,
+    float Tracking_wheel_diameter,
+    float X_offset,
+    float Y_offset
+    ):
+    L1(L_Port1),
+    L2(L_Port2),
+    L3(NULL),
+
+    R1(R_Port1, true),
+    R2(R_Port2, true),
+    R3(NULL, true),
+
+    L(L1, L2, L3),
+    R(R1, R2, R3),
+    //First, we need to convert diameter to Circumference, then we can use that to find the ratio of degrees to inches
+    wheel_ratio((wheel_size*M_PI)/360),
+    I(I_Port),
+    parallel(NULL),
+    perpendicular(NULL)
+    {}
+
+//2M Drive for crazy people
+Drive::Drive(
+    int L_Port1, 
+    int R_Port1, 
+    float wheel_size, 
+    int I_Port,
+    int Parallel_to_wheels_tracker_port, 
+    int Perpendicular_to_wheels_tracker_port, 
+    float Parallel_distance_from_center, 
+    float Perpendicular_distance_from_center,
+    float Tracking_wheel_diameter,
+    float X_offset,
+    float Y_offset
+    ):
+    L1(L_Port1),
+    L2(NULL),
+    L3(NULL),
+
+    R1(R_Port1, true),
+    R2(NULL, true),
+    R3(NULL, true),
+
+    L(L1, L2, L3),
+    R(R1, R2, R3),
+    //First, we need to convert diameter to Circumference, then we can use that to find the ratio of degrees to inches
+    wheel_ratio((wheel_size*M_PI)/360),
+    I(I_Port),
+    parallel(NULL),
+    perpendicular(NULL)
+    {}
+
 
 //Low level access to hardware
 void Drive::drive_with_voltage(float L_volt, float R_volt){

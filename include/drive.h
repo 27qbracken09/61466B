@@ -26,6 +26,59 @@ class Drive
         //2M Drive for whatever crazy reason
         Drive(int L_Port1, int R_Port1, float wheel_size, int I_Port);
 
+        //Odom Constructors
+        //6M Drive
+        Drive(
+            int L_Port1, 
+            int L_Port2, 
+            int L_Port3, 
+            int R_Port1, 
+            int R_Port2, 
+            int R_Port3, 
+            float wheel_size, 
+            int I_Port, 
+            int Parallel_to_wheels_tracker_port, 
+            int Perpendicular_to_wheels_tracker_port, 
+            float Parallel_distance_from_center, 
+            float Perpendicular_distance_from_center,
+            float Tracking_wheel_diameter,
+            float X_offset,
+            float Y_offset
+            );
+        
+        //4M Drive
+        Drive(
+            int L_Port1, 
+            int L_Port2, 
+            int R_Port1, 
+            int R_Port2, 
+            float wheel_size, 
+            int I_Port,
+            int Parallel_to_wheels_tracker_port, 
+            int Perpendicular_to_wheels_tracker_port, 
+            float Parallel_distance_from_center, 
+            float Perpendicular_distance_from_center,
+            float Tracking_wheel_diameter,
+            float X_offset,
+            float Y_offset
+            );
+
+        //2M Drive for whatever crazy reason
+        Drive(
+            int L_Port1, 
+            int R_Port1, 
+            float wheel_size, 
+            int I_Port,
+            int Parallel_to_wheels_tracker_port, 
+            int Perpendicular_to_wheels_tracker_port, 
+            float Parallel_distance_from_center, 
+            float Perpendicular_distance_from_center,
+            float Tracking_wheel_diameter,
+            float X_offset,
+            float Y_offset
+        );
+
+        
         //Motors - Unused ones use the port NULL
         vex::motor L1;
         vex::motor L2;
@@ -64,27 +117,8 @@ class Drive
 
         
 
-    //To start, we need an odometry class for odometry
-    class odom
-    {
-        public:
-            //Constructors
-            //There are two main types of odometry , Compounded - It requires no tracking wheels. It is the one I can test over the summer (however it is wildly inaccurate, as experiments during last season have shown)
-            // and Absolute, based off of this: https://www.youtube.com/watch?v=qqODIdvSGac - I will be implementing and theoretically verifying, but not actually testing
-            // It requires 2 tracking wheels perpendicular to each other - This I cannot test as I do not have tracking wheels
-            
-            odom(
-                int Parallel_to_wheels_tracker_port, 
-                int Perpendicular_to_wheels_tracker_port, 
-                float Parallel_distance_from_center, 
-                float Perpendicular_distance_from_center,
-                float Tracking_wheel_diameter,
-                float X_offset,
-                float Y_offset,
-
-                //We need the location of the drivetrain object
-                Drive &drivetrain
-            );
+    //To start, we need odometry constructor for odometry
+        
 
             //poll_Odometry will need to run in a thread to continously update Position data - Either one will update global vars, but they return their respective global vars
             float poll_x_odom();
@@ -98,16 +132,14 @@ class Drive
             vex::rotation parallel;
             vex::rotation perpendicular;
 
-            //The "stuff" at the location of the drivetrain passed in the constructor
-            Drive &odom_drive;
-
+            
             
 
-            
+    //Private Variables cannot be seen by other parts of the program
+    private:
+        float wheel_ratio;
 
-        private:
-            
-            //Stored constants
+        //Stored constants
             float parallel_dist_from_center;
             float perpendicular_dist_from_center;
             float tracked_wheel_ratio;
@@ -124,14 +156,6 @@ class Drive
 
             //I_heading is updated every time poll_chord is called to make my life easier
             float I_heading;
-            
-        
-
-    };
-
-    //Private Variables cannot be seen by other parts of the program
-    private:
-        float wheel_ratio;
 
         
 

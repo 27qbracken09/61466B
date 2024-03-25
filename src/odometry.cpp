@@ -3,43 +3,20 @@
 //Even though class is declared in drive.h, it will be easier to work with the actual code if it is within its own file
 
 
-//To access the Gyroscope/inertial, we needed to pass the location of the drivetrain that the user created, thats what the & is for
-//Then we stored that in a "new" object
-//We then could access the gyro info through that new object, though it was the original object info.
 
-//Absolute
-Drive::odom::odom(
-    int Parallel_to_wheels_tracker_port, 
-    int Perpendicular_to_wheels_tracker_port, 
-    float Parallel_distance_from_center, 
-    float Perpendicular_distance_from_center, 
-    float Tracking_wheel_diameter, 
-    float X_offset, 
-    float Y_offset, 
-    Drive &drivetrain
-    
-) : 
+ 
 
-parallel(Parallel_to_wheels_tracker_port), 
-perpendicular(Perpendicular_to_wheels_tracker_port),
 
-parallel_dist_from_center(Parallel_distance_from_center),
-perpendicular_dist_from_center(Perpendicular_distance_from_center),
-
-tracked_wheel_ratio((Tracking_wheel_diameter*M_PI)/360),
-odom_drive(drivetrain)
-
-{}
     
 
-float Drive::odom::poll_chord(){
+float Drive::poll_chord(){
     //First thing to do is to retrieve the encoder positions
     float parallel_rotation = parallel.position(vex::degrees);
     float perpendicular_rotation = perpendicular.position(vex::degrees);
     
     
     //Convert to radians because that's what trig functions take
-    I_heading = to_rad(odom_drive.I.heading());
+    I_heading = to_rad(I.heading());
     
     
     
@@ -64,7 +41,7 @@ float Drive::odom::poll_chord(){
 
 }
 
-float Drive::odom::poll_x_odom(){
+float Drive::poll_x_odom(){
 
     //Update vars - Calculate chord
     poll_chord();
@@ -81,7 +58,7 @@ float Drive::odom::poll_x_odom(){
     return Global_x_position;
 }
 
-float Drive::odom::poll_y_odom(){
+float Drive::poll_y_odom(){
 
     //Update vars - Calculate chord
     poll_chord();
