@@ -87,9 +87,8 @@ Drive::Drive(
     int Perpendicular_to_wheels_tracker_port, 
     float Parallel_distance_from_center, 
     float Perpendicular_distance_from_center,
-    float Tracking_wheel_diameter,
-    float X_offset,
-    float Y_offset
+    float Tracking_wheel_diameter
+    
     ) : 
     L1(L_Port1),
     L2(L_Port2),
@@ -104,8 +103,14 @@ Drive::Drive(
     //First, we need to convert diameter to Circumference, then we can use that to find the ratio of degrees to inches
     wheel_ratio((wheel_size*M_PI)/360),
     I(I_Port),
-    parallel(NULL),
-    perpendicular(NULL)
+    parallel(Parallel_to_wheels_tracker_port),
+    perpendicular(Perpendicular_to_wheels_tracker_port),
+    parallel_dist_from_center(Parallel_distance_from_center),
+    perpendicular_dist_from_center(Perpendicular_distance_from_center),
+    tracked_wheel_ratio((Tracking_wheel_diameter*M_PI)/360)
+   
+
+
     {
 //Calibrate Inertial/Gyro
         I.calibrate();
@@ -125,9 +130,8 @@ Drive::Drive(
     int Perpendicular_to_wheels_tracker_port, 
     float Parallel_distance_from_center, 
     float Perpendicular_distance_from_center,
-    float Tracking_wheel_diameter,
-    float X_offset,
-    float Y_offset
+    float Tracking_wheel_diameter
+    
     ):
     L1(L_Port1),
     L2(L_Port2),
@@ -156,9 +160,8 @@ Drive::Drive(
     int Perpendicular_to_wheels_tracker_port, 
     float Parallel_distance_from_center, 
     float Perpendicular_distance_from_center,
-    float Tracking_wheel_diameter,
-    float X_offset,
-    float Y_offset
+    float Tracking_wheel_diameter
+    
     ):
     L1(L_Port1),
     L2(NULL),

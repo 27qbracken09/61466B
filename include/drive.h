@@ -41,9 +41,8 @@ class Drive
             int Perpendicular_to_wheels_tracker_port, 
             float Parallel_distance_from_center, 
             float Perpendicular_distance_from_center,
-            float Tracking_wheel_diameter,
-            float X_offset,
-            float Y_offset
+            float Tracking_wheel_diameter
+            
             );
         
         //4M Drive
@@ -58,9 +57,8 @@ class Drive
             int Perpendicular_to_wheels_tracker_port, 
             float Parallel_distance_from_center, 
             float Perpendicular_distance_from_center,
-            float Tracking_wheel_diameter,
-            float X_offset,
-            float Y_offset
+            float Tracking_wheel_diameter
+            
             );
 
         //2M Drive for whatever crazy reason
@@ -73,9 +71,8 @@ class Drive
             int Perpendicular_to_wheels_tracker_port, 
             float Parallel_distance_from_center, 
             float Perpendicular_distance_from_center,
-            float Tracking_wheel_diameter,
-            float X_offset,
-            float Y_offset
+            float Tracking_wheel_diameter
+            
         );
 
         
@@ -132,6 +129,9 @@ class Drive
             vex::rotation parallel;
             vex::rotation perpendicular;
 
+            //X and Y offset
+            float start_x_offset;
+            float start_y_offset;
             
             
 
@@ -144,8 +144,7 @@ class Drive
             float perpendicular_dist_from_center;
             float tracked_wheel_ratio;
 
-            float start_x_offset;
-            float start_y_offset;
+            
 
             //Private chord updator
             float poll_chord();
