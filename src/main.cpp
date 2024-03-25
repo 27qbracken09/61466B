@@ -38,7 +38,7 @@ competition Competition;
 
 //Actual Declaration - L1, L2, R1, R2, Wheel Diameter, Inertial Port
 Drive chassis(PORT14, PORT16, PORT12, PORT13, 4, PORT3);
-Drive::odom test(NULL, NULL, 0, 0, 0, chassis);
+Drive::odom test(PORT18, PORT19, 7.5, 7.5,2.5, 0, 0,chassis);
 
 
 

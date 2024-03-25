@@ -2,15 +2,24 @@
 
 //Even though class is declared in drive.h, it will be easier to work with the actual code if it is within its own file
 
-//Compounded constructor - Will work on after absolute
-//Drive::odom::odom() : parallel(NULL), perpendicular(NULL), odom_drive(){}
 
 //To access the Gyroscope/inertial, we needed to pass the location of the drivetrain that the user created, thats what the & is for
 //Then we stored that in a "new" object
 //We then could access the gyro info through that new object, though it was the original object info.
 
 //Absolute
-Drive::odom::odom(int Parallel_to_wheels_tracker_port, int Perpendicular_to_wheels_tracker_port, float Parallel_distance_from_center, float Perpendicular_distance_from_center, float Tracking_wheel_diameter, Drive &drivetrain) : 
+Drive::odom::odom(
+    int Parallel_to_wheels_tracker_port, 
+    int Perpendicular_to_wheels_tracker_port, 
+    float Parallel_distance_from_center, 
+    float Perpendicular_distance_from_center, 
+    float Tracking_wheel_diameter, 
+    float X_offset, 
+    float Y_offset, 
+    Drive &drivetrain
+    
+) : 
+
 parallel(Parallel_to_wheels_tracker_port), 
 perpendicular(Perpendicular_to_wheels_tracker_port),
 

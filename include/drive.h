@@ -69,22 +69,24 @@ class Drive
     {
         public:
             //Constructors
-            //There are two types of odometry that I will be implementing, Compounded - It requires no tracking wheels. It is the one I can test over the summer
-            // and Absolute, based off of this: https://www.youtube.com/watch?v=qqODIdvSGac
+            //There are two main types of odometry , Compounded - It requires no tracking wheels. It is the one I can test over the summer (however it is wildly inaccurate, as experiments during last season have shown)
+            // and Absolute, based off of this: https://www.youtube.com/watch?v=qqODIdvSGac - I will be implementing and theoretically verifying, but not actually testing
             // It requires 2 tracking wheels perpendicular to each other - This I cannot test as I do not have tracking wheels
-            odom(); //This is the compounded version, and doesn't need to use anything extra
+            
             odom(
                 int Parallel_to_wheels_tracker_port, 
                 int Perpendicular_to_wheels_tracker_port, 
                 float Parallel_distance_from_center, 
                 float Perpendicular_distance_from_center,
                 float Tracking_wheel_diameter,
+                float X_offset,
+                float Y_offset,
 
                 //We need the location of the drivetrain object
                 Drive &drivetrain
             );
 
-            //poll_Odometry will need to run in a thread to continously update Position data
+            //poll_Odometry will need to run in a thread to continously update Position data - Either one will update global vars, but they return their respective global vars
             float poll_x_odom();
             float poll_y_odom();
 
@@ -119,6 +121,8 @@ class Drive
             //Respective Vars
             float x_chord;
             float y_chord;
+
+            //I_heading is updated every time poll_chord is called to make my life easier
             float I_heading;
             
         
