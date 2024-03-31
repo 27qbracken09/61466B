@@ -3,6 +3,9 @@
 //Even though class is declared in drive.h, it will be easier to work with the actual code if it is within its own file
 
 
+subRotation::subRotation(int32_t Port) : rotation(Port){
+    rotation::datarate(10);
+}
 
  
 
@@ -75,3 +78,22 @@ float Drive::poll_y_odom(){
     return Global_y_position;
 }
 
+void Drive::drive_to_coordinate(float x, float y){
+
+    //Update odom
+    poll_x_odom();
+
+    //Find distances from current position
+    float delta_x = x-Global_x_position;
+    float delta_y = y-Global_y_position;
+
+    float needed_angle = to_deg(atan(delta_x/delta_y));
+    float needed_distance = sqrt((delta_x*delta_x)+(delta_y*delta_y));
+
+
+    turn_to(needed_angle);
+    drive_for(needed_distance);
+    
+
+
+}

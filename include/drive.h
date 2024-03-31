@@ -7,6 +7,12 @@
 //Declaration of different ways to drive - Refer to vex for control styles
 enum drive_method{NO_DRIVE, TANK, SPLIT_ARCADE, COMB_ARCADE_L, COMB_ARCADE_R};
 
+//Subclass test to decrease Rotation update time
+class subRotation : public vex::rotation {
+    public: 
+    subRotation(int32_t Port);
+    };
+
 //Declaration of Drive class
 //This allows me to create a "template" that can be easily modified by feeding it certain variables
 //Sort of like a function on steroids
@@ -121,17 +127,23 @@ class Drive
             float poll_x_odom();
             float poll_y_odom();
 
+            //Drive to commands
+            void drive_to_coordinate(float x, float y);
+
             //X and y positions that other functions can read from
             float Global_x_position;
             float Global_y_position;
 
             //Rotation Sensors
-            vex::rotation parallel;
-            vex::rotation perpendicular;
+            subRotation parallel;
+            subRotation perpendicular;
 
             //X and Y offset
             float start_x_offset;
             float start_y_offset;
+    
+
+    
             
             
 
