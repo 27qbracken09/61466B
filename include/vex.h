@@ -8,6 +8,7 @@
 
 //Custom Includes
 #include <iostream>
+#include <sstream>
 
 //Custom Headers
 
@@ -15,6 +16,10 @@
 #include "drive.h"
 #include "pid.h"
 #include "util.h"
+#include "modules.h"
+
+//Graphics Library files
+#include "v5lvgl.h"
 
 #define PROG_NAME "Rewrite"
 

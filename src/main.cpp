@@ -14,6 +14,9 @@
 
 //Goal for 3/17/24: Start on Some form of Odometry - Validate Accuracy of robot
 
+//Goal for 4/11/24: Create Lvgl custom functions and set library - Never finished, due to time
+//Goal for 4/14/24: Start implementing log handler
+
 
 
 #include "vex.h"
