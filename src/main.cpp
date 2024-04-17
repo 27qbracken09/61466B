@@ -16,6 +16,8 @@
 
 //Goal for 4/11/24: Create Lvgl custom functions and set library - Never finished, due to time
 //Goal for 4/14/24: Start implementing log handler
+//Log Handler Implemented 4/17/23 - Issues include printing strings to sd card file (Abandoned), Learned how to use ostrinstream, scoped value in main for battery report, slightly worried about mem usage
+//Goal for 4/17/24 - Add logging to drive class
 
 
 
@@ -48,6 +50,7 @@ Drive chassis(PORT14, PORT16, PORT12, PORT13, 4, PORT3);
 
 
 void pre_auton(void) {
+  log("main.cpp/pre_auton", STATUS, "Pre Auton Started");
   
   
 }
@@ -55,6 +58,7 @@ void pre_auton(void) {
 
 
 void autonomous(void) {
+  log("main.cpp/autonomous", STATUS, "Auton Started");
   // ..........................................................................
   // Insert autonomous user code here.
   // ..........................................................................
@@ -63,13 +67,13 @@ void autonomous(void) {
 
 
 void usercontrol(void) {
+  log("main.cpp/usercontrol", STATUS, "Usercontrol Started");
   while (1) {
-    std::cout << "\nDriverControl Started";
+    
     
     //Update Driver control Drivetrain velocities using update function - Drivetrain is called chassis in this
     chassis.update(TANK);
-
-
+    
     wait(20, msec); // Sleep the task for a short amount of time to
                     // prevent wasted resources.
   }
@@ -79,7 +83,15 @@ void usercontrol(void) {
 // Main will set up the competition functions and callbacks.
 //
 int main() {
-  std::cout << "\nStarted Program";
+  log("main.cpp/main", STATUS, "Program Started");
+
+  { //Scope Pct Var so it's cleared after use
+  std::ostringstream BattpctString;
+  BattpctString << "Battery Percent: " << Brain.Battery.capacity(pct) << "%";
+  log("Battery", STATUS, BattpctString.str());
+  }
+  
+  
   // Set up callbacks for autonomous and driver control periods.
   Competition.autonomous(autonomous);
   Competition.drivercontrol(usercontrol);

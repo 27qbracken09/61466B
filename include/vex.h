@@ -1,3 +1,4 @@
+
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,6 +10,8 @@
 //Custom Includes
 #include <iostream>
 #include <sstream>
+#include <bits/stdc++.h> 
+#include <errno.h>
 
 //Custom Headers
 

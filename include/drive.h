@@ -118,6 +118,10 @@ class Drive
         float drive_for(float inches);
         float turn_to(float degrees);
 
+
+        
+
+
         
 
     //To start, we need odometry constructor for odometry
@@ -167,6 +171,9 @@ class Drive
 
             //I_heading is updated every time poll_chord is called to make my life easier
             float I_heading;
+
+            
+            
 
         
 

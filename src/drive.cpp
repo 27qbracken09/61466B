@@ -26,6 +26,14 @@ perpendicular(NULL)
 I.calibrate();
 while(I.isCalibrating()) wait(20,vex::msec);
 
+//Log which motors are plugged in
+if (!L1.installed()) log("Motor_L1", WARNING, "Motor Disconnected!");
+if (!L2.installed()) log("Motor_L2", WARNING, "Motor Disconnected!");
+if (!L3.installed()) log("Motor_L3", WARNING, "Motor Disconnected!");
+if (!R1.installed()) log("Motor_R1", WARNING, "Motor Disconnected!");
+if (!R2.installed()) log("Motor_R2", WARNING, "Motor Disconnected!");
+if (!R3.installed()) log("Motor_R3", WARNING, "Motor Disconnected!");
+
 }
 
 //4M Drive
@@ -46,7 +54,12 @@ I(I_Port),
 parallel(NULL),
 perpendicular(NULL)
 {
-   
+    if (!L1.installed()) log("Motor_L1", WARNING, "Motor Disconnected!");
+    if (!L2.installed()) log("Motor_L2", WARNING, "Motor Disconnected!");
+    //if (!L3.installed()) log("Motor_L3", WARNING, "Motor Disconnected!");
+    if (!R1.installed()) log("Motor_R1", WARNING, "Motor Disconnected!");
+    if (!R2.installed()) log("Motor_R2", WARNING, "Motor Disconnected!");
+    //if (!R3.installed()) log("Motor_R3", WARNING, "Motor Disconnected!");
 
 }
 
@@ -68,6 +81,9 @@ I(I_Port),
 parallel(NULL),
 perpendicular(NULL)
 {
+    if (!L1.installed()) log("Motor_L1", WARNING, "Motor Disconnected!");
+    if (!R1.installed()) log("Motor_R1", WARNING, "Motor Disconnected!");
+   
    
 
 }
@@ -115,6 +131,13 @@ Drive::Drive(
 //Calibrate Inertial/Gyro
         I.calibrate();
         while(I.isCalibrating()) wait(20,vex::msec);
+        if (!L1.installed()) log("Motor_L1", WARNING, "Motor Disconnected!");
+        if (!L2.installed()) log("Motor_L2", WARNING, "Motor Disconnected!");
+        if (!L3.installed()) log("Motor_L3", WARNING, "Motor Disconnected!");
+        if (!R1.installed()) log("Motor_R1", WARNING, "Motor Disconnected!");
+        if (!R2.installed()) log("Motor_R2", WARNING, "Motor Disconnected!");
+        if (!R3.installed()) log("Motor_R3", WARNING, "Motor Disconnected!");
+
 
     }
 
@@ -148,7 +171,15 @@ Drive::Drive(
     I(I_Port),
     parallel(NULL),
     perpendicular(NULL)
-    {}
+    {
+        if (!L1.installed()) log("Motor_L1", WARNING, "Motor Disconnected!");
+        if (!L2.installed()) log("Motor_L2", WARNING, "Motor Disconnected!");
+        
+        if (!R1.installed()) log("Motor_R1", WARNING, "Motor Disconnected!");
+        if (!R2.installed()) log("Motor_R2", WARNING, "Motor Disconnected!");
+        
+
+    }
 
 //2M Drive for crazy people
 Drive::Drive(
@@ -178,11 +209,20 @@ Drive::Drive(
     I(I_Port),
     parallel(NULL),
     perpendicular(NULL)
-    {}
+    {
+        if (!L1.installed()) log("Motor_L1", WARNING, "Motor Disconnected!");
+        if (!R1.installed()) log("Motor_R1", WARNING, "Motor Disconnected!");
+
+    }
 
 
 //Low level access to hardware
 void Drive::drive_with_voltage(float L_volt, float R_volt){
+    { //Scoping like this seems neater to combine stuff - Also saves memory by deleting objects once out of scope
+    std::ostringstream VoltageLabel;
+    VoltageLabel << "l_motor_group set to: " << L_volt << " r_motor_group set to: " << R_volt;
+    log("drive.cpp/Drive/drive_with_voltage", DEBUG, VoltageLabel.str());
+    }
     L.spin(vex::forward,L_volt,vex::volt);
     R.spin(vex::forward,R_volt,vex::volt);
 }
@@ -278,6 +318,22 @@ void Drive::update(enum::drive_method drive_method){
 
     };
 
+    //Check if the motors are getting too hot during driver
+
+    //Level 1
+    if (L.temperature(vex::celsius) > 50) log("l_motor_group", WARNING, "Motor Temp close to lv1(55C)!");
+    if (R.temperature(vex::celsius) > 50) log("r_motor_group", WARNING, "Motor Temp close to lv1(55C)!");
+
+    //Level 2
+    if (L.temperature(vex::celsius) > 55) log("l_motor_group", WARNING, "Motor Temp close to lv2(60C)!");
+    if (R.temperature(vex::celsius) > 55) log("r_motor_group", WARNING, "Motor Temp close to lv2(60C)!");
+
+    //Level 3
+    if (L.temperature(vex::celsius) > 60) log("l_motor_group", WARNING, "Motor Temp close to lv3(65C)!");
+    if (R.temperature(vex::celsius) > 60) log("r_motor_group", WARNING, "Motor Temp close t0 lv3(65C)!");
+
+    //Level 4 not implemented because motors would stop
+
 
     
 }
@@ -287,6 +343,20 @@ void Drive::drive_for_degrees(float degrees){
     //Spin each motor to target
     L.spinFor(degrees, vex::degrees);
     R.spinFor(degrees, vex::degrees);
+
+    //Check if the motors are getting too hot during movement
+
+    //Level 1
+    if (L.temperature(vex::celsius) > 50) log("l_motor_group", WARNING, "Motor Temp close to lv1(55C)!");
+    if (R.temperature(vex::celsius) > 50) log("r_motor_group", WARNING, "Motor Temp close to lv1(55C)!");
+
+    //Level 2
+    if (L.temperature(vex::celsius) > 55) log("l_motor_group", WARNING, "Motor Temp close to lv2(60C)!");
+    if (R.temperature(vex::celsius) > 55) log("r_motor_group", WARNING, "Motor Temp close to lv2(60C)!");
+
+    //Level 3
+    if (L.temperature(vex::celsius) > 60) log("l_motor_group", WARNING, "Motor Temp close to lv3(65C)!");
+    if (R.temperature(vex::celsius) > 60) log("r_motor_group", WARNING, "Motor Temp close t0 lv3(65C)!");
     
     
     
@@ -305,13 +375,15 @@ Drive_PID Drive_PID_R(0.07,0.0001,0, 1);
 //Drive_for command will use a Drive_PID in combination with the wheel size to drive a real-world distance
 float Drive::drive_for(float inches){
 
-    std::cout << "\nDrivefor Started";
+    log("Drivetrain", STATUS, "Drive Started");
     //Start by converting inches into degrees, to do this, we need the wheel size, which we can put in the constructor.
     float desired_degrees = inches/wheel_ratio;
 
-    //Output for debugging
-    std::cout << "\nDesired Degrees: " << desired_degrees;
-
+    {
+    std::ostringstream label;
+    label << "Computed Degrees" << desired_degrees;
+    log("drive.cpp/Drive/drive_for_degrees", DEBUG, label.str());
+    }
     //Then set desired degrees to distance from target - I'm going to try one for each wheel to help with accuracy
     float target_L_degrees = desired_degrees+L.position(vex::degrees);
     float target_R_degrees = desired_degrees+R.position(vex::degrees);
@@ -327,8 +399,32 @@ float Drive::drive_for(float inches){
     float L_volts = Drive_PID_L.calculate(error_L_degrees);
     float R_volts = Drive_PID_R.calculate(error_R_degrees);
 
-    //Output To terminal for debugging
-    //std::cout << "\n" << L_volts << ", " << R_volts << ", " << L.position(vex::degrees) << ", " << R.position(vex::degrees);
+    //Check if the motors are getting too hot during movement
+
+    //Level 1
+    if (L.temperature(vex::celsius) > 50) log("l_motor_group", WARNING, "Motor Temp close to lv1(55C)!");
+    if (R.temperature(vex::celsius) > 50) log("r_motor_group", WARNING, "Motor Temp close to lv1(55C)!");
+
+    //Level 2
+    if (L.temperature(vex::celsius) > 55) log("l_motor_group", WARNING, "Motor Temp close to lv2(60C)!");
+    if (R.temperature(vex::celsius) > 55) log("r_motor_group", WARNING, "Motor Temp close to lv2(60C)!");
+
+    //Level 3
+    if (L.temperature(vex::celsius) > 60) log("l_motor_group", WARNING, "Motor Temp close to lv3(65C)!");
+    if (R.temperature(vex::celsius) > 60) log("r_motor_group", WARNING, "Motor Temp close to lv3(65C)!");
+
+    //Log Motor Positions for debugging
+
+    {
+    std::ostringstream label;
+    label << "l_group @ " << L.position(vex::deg) << " (deg) r_group @ " << R.position(vex::deg) << " (deg)";
+    log("Drivetrain", DEBUG, label.str());
+
+    //Clear String and print motor voltages
+    label.str("");
+    label << "l_volt @ " << L_volts << " (volts) r_volt @ " << R_volts << " (volts)";
+    log("drive.cpp/Drive/drive_for", DEBUG, label.str());
+    }
 
     //Then Apply to motors
     L.spin(vex::forward, L_volts, vex::volt);
@@ -336,11 +432,17 @@ float Drive::drive_for(float inches){
     wait(20,vex::msec);
     }
 
-    std::cout << "\ndrive_for done";
-
+    
     //Added hold so motors do not coast - And had them stop in the first place to negate the affects of residual voltage
     L.stop(vex::hold);
     R.stop(vex::hold);
+
+    {
+    std::ostringstream label;
+
+    label << "Drive Completed within " << (L.position(vex::degrees)+R.position(vex::degrees))/2 << " degrees";
+    log("Drivetrain", STATUS, label.str());
+    }
 
     //Return avg for testing and datalogging
     return (L.position(vex::degrees)+R.position(vex::degrees))/2;
@@ -352,13 +454,19 @@ float Drive::drive_for(float inches){
 Drive_PID Turn_PID(0.1,0,0,1.5);
 float Drive::turn_to(float degrees){
     //Notify that turn has started
-    std::cout << "\nTurnto Started";
+    log("Drivetrain", STATUS, "TurnTo Started");
 
    
 
     //Collect initial gyro/inertial heading - In degrees from 0 - 360
     float normalized_target_I_degrees = reduce_negative_180_to_180(degrees);
 
+    {
+    std::ostringstream label;
+
+    label << "Attempting to turn to " << normalized_target_I_degrees<< " degrees";
+    log("Drivetrain", DEBUG, label.str());
+    }
     
 
     //Use PID declared above to turn to correct heading
@@ -383,7 +491,12 @@ float Drive::turn_to(float degrees){
         //float I_voltage = Turn_PID.calculate(error_I_degrees);
 
         //Debugging
-        //std::cout << "\n" << I_voltage;
+        {
+        std::ostringstream label;
+
+        label << "turn_volt @  " << I_voltage << " (volts)";
+        log("Drivetrain", DEBUG, label.str());
+        }
 
         //Spin wheels
         L.spin(vex::forward,I_voltage,vex::volt);
@@ -400,7 +513,12 @@ float Drive::turn_to(float degrees){
     R.stop(vex::hold);
 
     //Notify user
-    std::cout << "\nTurnTo Done";
+    {
+    std::ostringstream label;
+
+    label << "Turn Completed within " << normalized_target_I_degrees-I.heading() << " degrees";
+    log("Drivetrain", STATUS, label.str());
+    }
 
     return I.heading();
 
